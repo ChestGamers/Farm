@@ -100,12 +100,22 @@ img {
 }
 
 .info {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: #fff;
-	border-radius: 20px;
-	padding: 25px;
-	width: 500px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border-radius: 20px;
+    padding: 25px;
+    width: 90%; /* По умолчанию занимает 90% ширины */
+    max-width: 500px; /* Максимальная ширина для больших экранов */
+}
+
+/* Стили для экранов шириной менее 768px (мобильные устройства) */
+@media (max-width: 767px) {
+    .info {
+        width: 95%; /* Занимает еще больше ширины на маленьких экранах */
+        padding: 15px; /* Уменьшаем отступы */
+        border-radius: 10px; /* Уменьшаем радиус скругления */
+    }
 }
