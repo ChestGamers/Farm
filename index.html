@@ -8,20 +8,22 @@
     <title>ИНТЕРАКТИВНАЯ КАРТА КЛЮЧЕЙ</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+    <!-- Меню фильтрации в стиле Arena Breakout -->
     <div class="filters">
-        <button class="filter-btn active" data-filter="all">Все ключи</button>
-        <button class="filter-btn" data-filter="loot">Для лута</button>
-        <button class="filter-btn" data-filter="quest">Квестовые</button>
+        <button class="filter-btn active" data-filter="all">Все <span class="count-badge" id="count-all">0</span></button>
+        <button class="filter-btn" data-filter="loot">Для лута <span class="count-badge" id="count-loot">0</span></button>
+        <button class="filter-btn" data-filter="quest">Квестовые <span class="count-badge" id="count-quest">0</span></button>
     </div>
 
+    <!-- Главная область карты -->
     <div class="Map">
-        <div class="map-wrapper">
-            <div class="map-farm" id="panzoom-element">
+        <div class="map-wrapper" id="panzoom-element">
+            <div class="map-farm">
                 <svg viewBox="0 0 6640 3302">
                     <path data-type="loot" data-description="Ключ от офиса на втором этаже пункта торговли зерном в фермерских угодьях. там может хранится что-то ценное" data-photo="media/Key/Farm/ключ от офиса в амбаре.png" data-title="Ключ от офиса в амбаре" class="key" d="m 1439.3177,2193.8039 0.3254,44.9177 48.1726,-0.9765 -1.302,-43.2902 z" />
                     <path data-type="loot" data-description="Ключ, который носят при себе комбатанты. Открывает дверь у кладбища на ферме. Там можно найти ценности, собранные комбатантами" data-photo="media/Key/Farm/ключ от кладбища.png" data-title="Ключ с кладбища" class="key" d="m 1974.4235,2429.4588 1.302,41.0118 h 45.5686 l -1.9529,-40.3608 z" />
@@ -38,6 +40,7 @@
         </div>
     </div>
 
+    <!-- Информационное окно -->
     <div class="info__bg">
         <div class="info">
             <button class="info__close">&times;</button>
