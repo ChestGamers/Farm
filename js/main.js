@@ -4,20 +4,20 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom с правильными настройками свободы перемещения
+// Инициализируем Panzoom на обертку
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
-    maxScale: 5,         // Максимальное увеличение
-    minScale: 0.3,       // Максимальное уменьшение
-    contain: 'outside',  // ВАЖНО: Разрешает карте выходить за границы для свободного перемещения
-    canvas: true,        // Корректно обрабатывает внутренние элементы (картинку + SVG)
+    maxScale: 5,
+    minScale: 0.3,
+    contain: 'outside', // Позволяет карте выходить за границы экрана
+    canvas: true,       // Важно для корректного перемещения SVG внутри
     startScale: 1
 });
 
-// Включаем зум колесиком мыши
+// Зум колесиком мыши
 panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-// Проверка: является ли устройство сенсорным
+// Проверка на сенсорный экран
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 keys.forEach(key => {
