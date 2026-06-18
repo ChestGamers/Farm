@@ -4,17 +4,20 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Настройка Panzoom: разрешаем перемещение за границы экрана
+// Инициализация Panzoom напрямую на элемент карты
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
-    maxScale: 5,
-    minScale: 0.4,
-    contain: 'outside', 
-    canvas: true
+    maxScale: 6,
+    minScale: 0.15,
+    contain: 'outside', // Позволяет свободно таскать во все стороны
+    startScale: 0.3 // Стартовый масштаб, чтобы карта сразу влезала в экран мобильного
 });
 
-// Добавляем зум от колесика мыши
-panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+// Настройка зума колесиком мыши (слушаем родительский контейнер)
+panzoomElement.parentElement.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    panzoom.zoomWithWheel(e);
+});
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -38,7 +41,7 @@ keys.forEach(key => {
 	}
 });
 
-// Обработка кликов по фильтрам
+// Фильтрация кнопок
 const filterButtons = document.querySelectorAll('.filter-btn');
 filterButtons.forEach(button => {
     button.addEventListener('click', function() {
