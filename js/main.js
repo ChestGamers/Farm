@@ -4,12 +4,13 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom на обертку карты
+// Инициализация Panzoom с правильными настройками свободы перемещения
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
-    maxScale: 4, // Максимальное увеличение (в 4 раза)
-    minScale: 0.5, // Максимальное уменьшение
-    contain: 'outside', // Карта не будет улетать за пределы экрана при уменьшении
+    maxScale: 5,         // Максимальное увеличение
+    minScale: 0.3,       // Максимальное уменьшение
+    contain: 'outside',  // ВАЖНО: Разрешает карте выходить за границы для свободного перемещения
+    canvas: true,        // Корректно обрабатывает внутренние элементы (картинку + SVG)
     startScale: 1
 });
 
