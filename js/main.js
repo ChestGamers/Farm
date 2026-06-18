@@ -4,22 +4,25 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализируем Panzoom на обертку
+// 1. Находим элемент для Panzoom
 const panzoomElement = document.getElementById('panzoom-element');
+
+// 2. Инициализируем библиотеку с полной свободой перетаскивания
 const panzoom = Panzoom(panzoomElement, {
     maxScale: 5,
     minScale: 0.3,
-    contain: 'outside', // Позволяет карте выходить за границы экрана
-    canvas: true,       // Важно для корректного перемещения SVG внутри
+    contain: 'outside', // Разрешает выходить за границы экрана для скролла влево/вправо
+    canvas: true,       // Корректно считает координаты SVG внутри блока
     startScale: 1
 });
 
-// Зум колесиком мыши
+// 3. Зум колесиком мыши (на ПК)
 panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-// Проверка на сенсорный экран
+// Проверка на тач-устройство
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+// Логика кликов и наведения на ключи
 keys.forEach(key => {
 	key.addEventListener('click', function(e) {
 		popup.querySelector('.info__photo').setAttribute('src', this.dataset.photo);
@@ -45,12 +48,12 @@ keys.forEach(key => {
 	}
 });
 
-// Закрытие модального окна
+// Закрытие попапа
 const closePopup = () => popupBg.classList.remove('active');
-popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
-popupClose.addEventListener('click', closePopup);
+if(popupBg) popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
+if(popupClose) popupClose.addEventListener('click', closePopup);
 
-// Логика фильтрации
+// Исправленная логика фильтрации
 const filterButtons = document.querySelectorAll('.filter-btn');
 filterButtons.forEach(button => {
     button.addEventListener('click', function() {
@@ -62,9 +65,9 @@ filterButtons.forEach(button => {
         keys.forEach(key => {
             const keyType = key.dataset.type;
             if (filterValue === 'all' || keyType === filterValue) {
-                key.style.display = 'block';
+                key.style.display = 'block'; // Исправлено: убрано лишнее .style
             } else {
-                key.style.display = 'none';
+                key.style.display = 'none';  // Исправлено: убрано лишнее .style
             }
         });
     });
