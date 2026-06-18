@@ -24,7 +24,8 @@ img {
 	position: relative;
 	overflow: hidden;
 	cursor: grab;
-	touch-action: none; /* Передаем жесты в Panzoom */
+	/* ВАЖНО: отключаем стандартные жесты скролла браузера, отдаем управление Panzoom */
+	touch-action: none; 
 }
 
 .Map:active {
@@ -36,9 +37,10 @@ img {
 	height: 100%;
 }
 
+/* Задаем фиксированную базовую ширину карты */
 .map-farm {
-	width: 3302px; 
-	height: 1651px; 
+	width: 3302px;
+	height: 1651px;
 	position: relative;
 }
 
@@ -51,7 +53,7 @@ img {
 }
 
 .Map svg path {
-	fill: rgba(0, 17, 255, 0.05);
+	fill: rgba(0, 17, 255, 0.01);
 	pointer-events: all;
 }
 
@@ -59,6 +61,8 @@ img {
 	stroke: rgb(0, 17, 255);
 	stroke-width: 14px;
 	cursor: pointer;
+	pointer-events: all;
+	transition: stroke 0.2s ease;
 }
 
 .key:hover {
@@ -71,16 +75,17 @@ img {
 }
 
 .tooltip {
-	position: absolute;
+	position: fixed; /* Меняем на fixed, чтобы не зависеть от перемещения карты */
 	left: 0;
 	top: 0;
-	padding: 8px 12px;
+	padding: 6px 12px;
 	background: rgba(197, 239, 250, 0.95);
 	border-radius: 8px;
 	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 	display: none;
 	pointer-events: none;
 	z-index: 100;
+	font-size: 14px;
 }
 
 .info__bg {
