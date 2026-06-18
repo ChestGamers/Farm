@@ -6,6 +6,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Montserrat', sans-serif;
+	background-color: #1a1a1a; /* Темный фон отлично подходит для игровых карт */
 }
 
 img {
@@ -19,6 +20,7 @@ img {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	overflow: auto;
 }
 
 .map-farm {
@@ -35,37 +37,32 @@ img {
 	width: 100%;
 }
 
-.map svg path {
+/* Исправлен регистр селектора .Map */
+.Map svg path {
 	fill: none;
 	pointer-events: all;
 	cursor: pointer;
-}
-
-.map svg path:hover {
-	animation: hoverElement 2s linear infinite;
 }
 
 .key {
 	fill: none;
 	stroke: rgb(0, 17, 255);
-	stroke-width: 10px;
+	stroke-width: 14px; /* Немного увеличим толщину для удобства клика */
 	cursor: pointer;
 	pointer-events: all;
+	transition: stroke 0.2s ease;
 }
 
 .key:hover {
-	animation: highlightKey 2s linear infinite;
+	animation: highlightKey 1.5s linear infinite alternate;
 }
 
 @keyframes highlightKey {
 	0% {
 		stroke: rgb(0, 255, 0);
 	}
-	50% {
-		stroke: red;
-	}
 	100% {
-		stroke: black;
+		stroke: rgb(255, 0, 0);
 	}
 }
 
@@ -73,11 +70,16 @@ img {
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 5px;
-	background: #c5effa;
-	border-radius: 10px;
-	box-shadow: 0 0 10px rgba(0,0,0,0.3);
+	padding: 6px 12px;
+	background: rgba(197, 239, 250, 0.95);
+	border: 1px solid #78cdd7;
+	border-radius: 6px;
+	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 	display: none;
+	pointer-events: none; /* Важно: мышь "игнорирует" тултип, предотвращая мерцание */
+	font-size: 13px;
+	font-weight: 500;
+	z-index: 100;
 }
 
 .info__bg {
@@ -86,7 +88,7 @@ img {
 	left: 0;
 	width: 100%;
 	height: 100vh;
-	background: rgba(0,0,0,0.5);
+	background: rgba(0,0,0,0.7);
 	opacity: 0;
 	transition: 0.3s all;
 	pointer-events: none;
@@ -96,17 +98,64 @@ img {
 .info__bg.active {
 	pointer-events: all;
 	opacity: 1;
-	transition: 0.3s all;
 }
 
 .info {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fff;
-    border-radius: 20px;
-    padding: 25px;
-    width: 90%; /* Изменили на относительную ширину */
-    max-width: 500px; /* Ограничение для больших экранов */
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: #fff;
+	border-radius: 20px;
+	padding: 25px;
+	width: 500px;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.info__photo {
+	border-radius: 10px;
+	margin-bottom: 15px;
+	width: 100%;
+	object-fit: cover;
+}
+
+/* Стили панели фильтрации */
+.filters {
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 10px;
+	z-index: 5;
+	background: rgba(30, 30, 30, 0.85);
+	padding: 10px 20px;
+	border-radius: 30px;
+	box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+	backdrop-filter: blur(5px);
+	border: 1px solid rgba(255,255,255,0.1);
+}
+
+.filter-btn {
+	background: transparent;
+	border: 2px solid #0011ff;
+	color: #0011ff;
+	padding: 8px 18px;
+	font-family: 'Montserrat', sans-serif;
+	font-weight: 500;
+	font-size: 14px;
+	border-radius: 20px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+	background: rgba(0, 17, 255, 0.1);
+	color: #3344ff;
+}
+
+.filter-btn.active {
+	background: #0011ff;
+	color: #fff;
+	box-shadow: 0 0 12px rgba(0, 17, 255, 0.6);
 }
