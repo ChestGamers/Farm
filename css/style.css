@@ -54,11 +54,10 @@ img {
 }
 
 .Map svg path {
-	fill: rgba(255, 106, 0, 0.01); /* Изменили базовый цвет неактивной зоны */
+	fill: rgba(255, 106, 0, 0.01);
 	pointer-events: all;
 }
 
-/* Маркеры ключей на карте в стиле игры (Оранжевый неон) */
 .key {
 	stroke: #ff6a00;
 	stroke-width: 14px;
@@ -95,7 +94,7 @@ img {
 	letter-spacing: 0.5px;
 }
 
-/* Меню кнопок-фильтров в стиле Arena Breakout (Тактический темный) */
+/* Меню кнопок-фильтров (для ПК) */
 .filters {
 	position: fixed;
 	top: 20px;
@@ -106,7 +105,7 @@ img {
 	z-index: 5;
 	background: rgba(18, 18, 18, 0.9);
 	padding: 6px 12px;
-	border-radius: 4px; /* Прямоугольные милитари формы */
+	border-radius: 4px;
 	box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255,255,255,0.08);
@@ -120,7 +119,7 @@ img {
 	font-family: 'Montserrat', sans-serif;
 	font-weight: 600;
 	font-size: 13px;
-	text-transform: uppercase; /* Брутальный верхний регистр */
+	text-transform: uppercase;
 	letter-spacing: 0.5px;
 	border-radius: 2px;
 	cursor: pointer;
@@ -137,7 +136,6 @@ img {
 	border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Активное состояние кнопки — Фирменный Оранжевый */
 .filter-btn.active { 
 	background: rgba(255, 106, 0, 0.15); 
 	border-color: #ff6a00; 
@@ -145,7 +143,6 @@ img {
 	box-shadow: inset 0 0 10px rgba(255,106,0,0.2);
 }
 
-/* Окно счетчика внутри кнопки */
 .count-badge {
 	background: rgba(255, 255, 255, 0.1);
 	color: #888888;
@@ -161,7 +158,7 @@ img {
 	color: #000000;
 }
 
-/* Окно информации в стиле инвентаря */
+/* Окно информации */
 .info__bg {
 	position: fixed;
 	top: 0;
@@ -188,7 +185,7 @@ img {
 	transform: translate(-50%, -50%);
 	background: #121212;
 	border: 1px solid rgba(255,255,255,0.1);
-	border-top: 4px solid #ff6a00; /* Оранжевая полоса сверху */
+	border-top: 4px solid #ff6a00;
 	border-radius: 4px;
 	padding: 25px;
 	width: 90%;
@@ -234,19 +231,17 @@ img {
 	background: #1a1a1a;
 }
 
-/* Адаптив под мобильные экраны */
+/* УЛЬТРА-КОМПАКТНЫЙ АДАПТИВ ДЛЯ МОБИЛЬНЫХ */
 @media (max-width: 768px) {
 	.filters {
 		top: auto;
-		bottom: 24px;
-		width: 92%;
-		max-width: 380px;
-		justify-content: flex-start;
-		overflow-x: auto;
-		scroll-behavior: smooth;
-		-webkit-overflow-scrolling: touch;
-		padding: 6px;
-		gap: 6px;
+		bottom: 16px; /* Чуть ближе к нижнему краю */
+		width: auto; /* Теперь панель подстраивается под контент, а не растягивается */
+		max-width: 94%;
+		justify-content: center;
+		padding: 4px; /* Минимальный внутренний отступ плашки */
+		gap: 4px; /* Минимальное расстояние между кнопками */
+		border-radius: 3px;
 	}
 	
 	.filters::-webkit-scrollbar {
@@ -254,8 +249,14 @@ img {
 	}
 
 	.filter-btn {
-		padding: 8px 12px;
-		font-size: 11px;
+		padding: 5px 10px; /* Сжали кнопки по вертикали и горизонтали */
+		font-size: 10px; /* Сделали шрифт еще меньше и аккуратнее */
+		gap: 5px; /* Меньше расстояние между текстом и цифрой */
+	}
+
+	.count-badge {
+		font-size: 9px; /* Сжали саму цифру счетчика */
+		padding: 1px 4px;
 	}
 
 	.info {
