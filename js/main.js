@@ -4,18 +4,29 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
+// Инициализация Panzoom на обертку карты
+const panzoomElement = document.getElementById('panzoom-element');
+const panzoom = Panzoom(panzoomElement, {
+    maxScale: 4, // Максимальное увеличение (в 4 раза)
+    minScale: 0.5, // Максимальное уменьшение
+    contain: 'outside', // Карта не будет улетать за пределы экрана при уменьшении
+    startScale: 1
+});
+
+// Включаем зум колесиком мыши
+panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+
 // Проверка: является ли устройство сенсорным
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 keys.forEach(key => {
-	key.addEventListener('click', function() {
+	key.addEventListener('click', function(e) {
 		popup.querySelector('.info__photo').setAttribute('src', this.dataset.photo);
 		popup.querySelector('.info_title').textContent = this.dataset.title;
 		popup.querySelector('.info__text').textContent = this.dataset.description;
 		popupBg.classList.add('active');
 	});
 
-	// Показываем тултип только на ПК
 	if (!isTouchDevice) {
 		key.addEventListener('mousemove', function(e) {
 			tooltip.textContent = this.dataset.title;
@@ -33,7 +44,7 @@ keys.forEach(key => {
 	}
 });
 
-// Закрытие модального окна (оверлей + кнопка крестика)
+// Закрытие модального окна
 const closePopup = () => popupBg.classList.remove('active');
 popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
 popupClose.addEventListener('click', closePopup);
@@ -50,9 +61,9 @@ filterButtons.forEach(button => {
         keys.forEach(key => {
             const keyType = key.dataset.type;
             if (filterValue === 'all' || keyType === filterValue) {
-                key.style.style.display = 'block';
+                key.style.display = 'block';
             } else {
-                key.style.style.display = 'none';
+                key.style.display = 'none';
             }
         });
     });
