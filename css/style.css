@@ -1,12 +1,14 @@
 * {
 	box-sizing: border-box;
+	-webkit-tap-highlight-color: transparent; /* Убирает синий синяк при клике на мобилках */
 }
 
 body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Montserrat', sans-serif;
-	background-color: #1a1a1a; /* Темный фон отлично подходит для игровых карт */
+	background-color: #1a1a1a;
+	overflow: hidden; /* Предотвращаем дерганье всей страницы */
 }
 
 img {
@@ -14,30 +16,29 @@ img {
 	height: auto;
 }
 
+/* Контейнер карты теперь позволяет скроллить большую картинку на мобилках */
 .Map {
-	width: 100%;
+	width: 100vw;
 	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: auto;
+	overflow: auto; 
+	display: block; /* Смена с flex для корректного нативного скролла */
+	-webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
 }
 
 .map-farm {
-	max-width: 3302px;
+	width: 2500px; /* Задаем базовую ширину карты для мобильных, чтобы она не сжималась в кашу */
+	max-width: 6640px;
 	position: relative;
-	text-align: center;
 }
 
 .map-farm svg {
 	position: absolute;
-	top: -2px;
+	top: 0;
 	left: 0;
 	height: 100%;
 	width: 100%;
 }
 
-/* Исправлен регистр селектора .Map */
 .Map svg path {
 	fill: none;
 	pointer-events: all;
@@ -45,9 +46,9 @@ img {
 }
 
 .key {
-	fill: none;
+	fill: rgba(0, 17, 255, 0.1); /* Легкая заливка, чтобы по ключу было легче попасть пальцем */
 	stroke: rgb(0, 17, 255);
-	stroke-width: 14px; /* Немного увеличим толщину для удобства клика */
+	stroke-width: 20px; /* Увеличена толщина обводки для мобильных тапов */
 	cursor: pointer;
 	pointer-events: all;
 	transition: stroke 0.2s ease;
@@ -58,12 +59,8 @@ img {
 }
 
 @keyframes highlightKey {
-	0% {
-		stroke: rgb(0, 255, 0);
-	}
-	100% {
-		stroke: rgb(255, 0, 0);
-	}
+	0% { stroke: rgb(0, 255, 0); }
+	100% { stroke: rgb(255, 0, 0); }
 }
 
 .tooltip {
@@ -76,12 +73,13 @@ img {
 	border-radius: 6px;
 	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 	display: none;
-	pointer-events: none; /* Важно: мышь "игнорирует" тултип, предотвращая мерцание */
+	pointer-events: none;
 	font-size: 13px;
 	font-weight: 500;
 	z-index: 100;
 }
 
+/* Окна информации (Попапы) */
 .info__bg {
 	position: fixed;
 	top: 0;
@@ -108,8 +106,13 @@ img {
 	background: #fff;
 	border-radius: 20px;
 	padding: 25px;
-	width: 500px;
+	width: 90%;
+	max-width: 500px;
 	box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.info__close {
+	display: none; /* На ПК кнопка не нужна */
 }
 
 .info__photo {
@@ -119,7 +122,7 @@ img {
 	object-fit: cover;
 }
 
-/* Стили панели фильтрации */
+/* Фильтры по умолчанию (ПК) */
 .filters {
 	position: fixed;
 	top: 20px;
@@ -147,15 +150,75 @@ img {
 	border-radius: 20px;
 	cursor: pointer;
 	transition: all 0.2s ease;
+	white-space: nowrap;
 }
 
 .filter-btn:hover {
 	background: rgba(0, 17, 255, 0.1);
-	color: #3344ff;
 }
 
 .filter-btn.active {
 	background: #0011ff;
 	color: #fff;
-	box-shadow: 0 0 12px rgba(0, 17, 255, 0.6);
+}
+
+
+/* ==========================================================================
+   МЕДИА-ЗАПРОСЫ (АДАПТИВ ДЛЯ ПЛАНШЕТОВ И МОБИЛЬНЫХ)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+	.map-farm {
+		width: 1800px; /* Оптимальный размер карты для планшетов */
+	}
+}
+
+@media (max-width: 768px) {
+	/* Переносим фильтры вниз экрана — под большой палец */
+	.filters {
+		top: auto;
+		bottom: 20px;
+		width: 90%;
+		justify-content: center;
+		padding: 8px 10px;
+	}
+
+	.filter-btn {
+		font-size: 12px;
+		padding: 6px 12px;
+	}
+
+	/* Перестраиваем попап во весь экран на мобилках */
+	.info {
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+		transform: none;
+		border-radius: 0;
+		overflow-y: auto;
+		padding: 60px 20px 20px 20px;
+	}
+
+	/* Кнопка закрытия для мобильного попапа */
+	.info__close {
+		display: block;
+		position: absolute;
+		top: 15px;
+		right: 20px;
+		background: #f0f0f0;
+		border: none;
+		font-size: 30px;
+		width: 40px;
+		height: 40px;
+		line-height: 38px;
+		border-radius: 50%;
+		cursor: pointer;
+		color: #333;
+		text-align: center;
+	}
+	
+	.map-farm {
+		width: 1400px; /* Размер карты для мобилок. Можно свободно двигать пальцем */
+	}
 }
