@@ -8,7 +8,7 @@ body {
 	padding: 0;
 	font-family: 'Montserrat', sans-serif;
 	background-color: #1a1a1a;
-	overflow: hidden; /* Отключаем прокрутку самого браузера */
+	overflow: hidden;
 }
 
 img {
@@ -18,30 +18,28 @@ img {
 	-webkit-user-drag: none;
 }
 
-/* Окно просмотра */
 .Map {
 	width: 100vw;
 	height: 100vh;
 	position: relative;
 	overflow: hidden;
 	cursor: grab;
-	background-color: #1a1a1a;
-	touch-action: none; /* Запрещает нативный скролл страницы на телефонах */
+	touch-action: none; /* Передаем жесты в Panzoom */
 }
 
 .Map:active {
 	cursor: grabbing;
 }
 
-/* Сама карта. Задаем фиксированные размеры, чтобы скрипт мог спокойно двигать её */
+.map-wrapper {
+	width: 100%;
+	height: 100%;
+}
+
 .map-farm {
 	width: 3302px; 
 	height: 1651px; 
-	position: absolute; /* Меняем на absolute для свободного позиционирования */
-	top: 0;
-	left: 0;
-	transform-origin: 0 0; /* Точка отсчета трансформаций */
-	will-change: transform; /* Оптимизация плавности отрисовки */
+	position: relative;
 }
 
 .map-farm svg {
@@ -50,21 +48,17 @@ img {
 	left: 0;
 	height: 100%;
 	width: 100%;
-	z-index: 2;
 }
 
 .Map svg path {
-	fill: none;
+	fill: rgba(0, 17, 255, 0.05);
 	pointer-events: all;
 }
 
 .key {
-	fill: rgba(0, 17, 255, 0.05);
 	stroke: rgb(0, 17, 255);
-	stroke-width: 16px;
+	stroke-width: 14px;
 	cursor: pointer;
-	pointer-events: all;
-	transition: stroke 0.2s ease;
 }
 
 .key:hover {
@@ -73,26 +67,22 @@ img {
 
 @keyframes highlightKey {
 	0% { stroke: rgb(0, 255, 0); }
-	100% { stroke: rgb(255, 0, 0); }
+	100% { stroke: red; }
 }
 
 .tooltip {
 	position: absolute;
 	left: 0;
 	top: 0;
-	padding: 6px 12px;
+	padding: 8px 12px;
 	background: rgba(197, 239, 250, 0.95);
-	border: 1px solid #78cdd7;
-	border-radius: 6px;
+	border-radius: 8px;
 	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 	display: none;
 	pointer-events: none;
-	font-size: 13px;
-	font-weight: 500;
 	z-index: 100;
 }
 
-/* Попапы */
 .info__bg {
 	position: fixed;
 	top: 0;
@@ -125,7 +115,14 @@ img {
 }
 
 .info__close {
-	display: none;
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	background: none;
+	border: none;
+	font-size: 28px;
+	cursor: pointer;
+	color: #333;
 }
 
 .info__photo {
@@ -135,61 +132,7 @@ img {
 	object-fit: cover;
 }
 
-/* Панель фильтров */
-.filters {
-	position: fixed;
-	top: 20px;
-	left: 50%;
-	transform: translateX(-50%);
-	display: flex;
-	gap: 10px;
-	z-index: 5;
-	background: rgba(30, 30, 30, 0.85);
-	padding: 10px 20px;
-	border-radius: 30px;
-	box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-	backdrop-filter: blur(5px);
-	border: 1px solid rgba(255,255,255,0.1);
-}
-
-.filter-btn {
-	background: transparent;
-	border: 2px solid #0011ff;
-	color: #0011ff;
-	padding: 8px 18px;
-	font-family: 'Montserrat', sans-serif;
-	font-weight: 500;
-	font-size: 14px;
-	border-radius: 20px;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	white-space: nowrap;
-}
-
-.filter-btn:hover {
-	background: rgba(0, 17, 255, 0.1);
-}
-
-.filter-btn.active {
-	background: #0011ff;
-	color: #fff;
-}
-
-/* Адаптив для смартфонов */
 @media (max-width: 768px) {
-	.filters {
-		top: auto;
-		bottom: 20px;
-		width: 95%;
-		justify-content: center;
-		padding: 8px 10px;
-	}
-
-	.filter-btn {
-		font-size: 12px;
-		padding: 6px 12px;
-	}
-
 	.info {
 		width: 100%;
 		height: 100%;
@@ -198,23 +141,11 @@ img {
 		transform: none;
 		border-radius: 0;
 		overflow-y: auto;
-		padding: 60px 20px 20px 20px;
+		padding: 50px 20px 20px 20px;
 	}
-
 	.info__close {
-		display: block;
-		position: absolute;
 		top: 15px;
 		right: 20px;
-		background: #f0f0f0;
-		border: none;
-		font-size: 30px;
-		width: 40px;
-		height: 40px;
-		line-height: 38px;
-		border-radius: 50%;
-		cursor: pointer;
-		color: #333;
-		text-align: center;
+		font-size: 35px;
 	}
 }
