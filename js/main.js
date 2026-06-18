@@ -4,23 +4,43 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom
+// Инициализация Panzoom на обертку холста
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
     maxScale: 5,
-    minScale: 0.2,
+    minScale: 0.3,
     contain: 'outside', 
-    startScale: 0.35 // Сразу немного отдаляем карту, чтобы она красиво влезала в экран телефона
+    canvas: true, 
+    handleStartEvent: (e) => {
+        if (e.target.closest('.key') || e.target.closest('.filters')) {
+            return;
+        }
+        e.preventDefault();
+    }
 });
 
-// ВАЖНО ДЛЯ МОБИЛЬНЫХ: Принудительно запускаем отслеживание тач-жестов (щипков и свайпов)
-panzoom.bind();
+// Настройка зума колесиком мыши
+panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-// Зум колесиком мыши на ПК
-panzoomElement.parentElement.addEventListener('wheel', (e) => {
-    e.preventDefault();
-    panzoom.zoomWithWheel(e);
-});
+// ФУНКЦИЯ АВТОМАТИЧЕСКОГО СЧЕТЧИКА КЛЮЧЕЙ
+function updateCounters() {
+    const totalKeys = keys.length;
+    let lootCount = 0;
+    let questCount = 0;
+
+    keys.forEach(key => {
+        if (key.dataset.type === 'loot') lootCount++;
+        if (key.dataset.type === 'quest') questCount++;
+    });
+
+    // Записываем цифры в соответствующие кнопки
+    document.getElementById('count-all').innerText = totalKeys;
+    document.getElementById('count-loot').innerText = lootCount;
+    document.getElementById('count-quest').innerText = questCount;
+}
+
+// Запускаем подсчет сразу при загрузке страницы
+updateCounters();
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
