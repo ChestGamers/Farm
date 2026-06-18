@@ -1,6 +1,6 @@
 * {
 	box-sizing: border-box;
-	-webkit-tap-highlight-color: transparent; /* Убирает синий синяк при клике на мобилках */
+	-webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -8,25 +8,41 @@ body {
 	padding: 0;
 	font-family: 'Montserrat', sans-serif;
 	background-color: #1a1a1a;
-	overflow: hidden; /* Предотвращаем дерганье всей страницы */
+	overflow: hidden; /* Браузерный скролл больше не нужен, управление внутри Panzoom */
 }
 
 img {
 	max-width: 100%;
 	height: auto;
+	user-select: none; /* Защита от случайного выделения картинки при перетаскивании */
+	-webkit-user-drag: none;
 }
 
-/* Контейнер карты теперь позволяет скроллить большую картинку на мобилках */
+/* Главный контейнер-окно */
 .Map {
 	width: 100vw;
 	height: 100vh;
-	overflow: auto; 
-	display: block; /* Смена с flex для корректного нативного скролла */
-	-webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
+	position: relative;
+	overflow: hidden;
+	cursor: grab; /* Визуальный курсор руки для перетаскивания */
 }
 
+.Map:active {
+	cursor: grabbing; /* Курсор сжатого кулака при перетаскивании */
+}
+
+/* Обертка для Panzoom */
+.map-wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Контейнер самой карты */
 .map-farm {
-	width: 2500px; /* Задаем базовую ширину карты для мобильных, чтобы она не сжималась в кашу */
+	width: 100%;
 	max-width: 6640px;
 	position: relative;
 }
@@ -42,13 +58,12 @@ img {
 .Map svg path {
 	fill: none;
 	pointer-events: all;
-	cursor: pointer;
 }
 
 .key {
-	fill: rgba(0, 17, 255, 0.1); /* Легкая заливка, чтобы по ключу было легче попасть пальцем */
+	fill: rgba(0, 17, 255, 0.05);
 	stroke: rgb(0, 17, 255);
-	stroke-width: 20px; /* Увеличена толщина обводки для мобильных тапов */
+	stroke-width: 16px;
 	cursor: pointer;
 	pointer-events: all;
 	transition: stroke 0.2s ease;
@@ -79,7 +94,7 @@ img {
 	z-index: 100;
 }
 
-/* Окна информации (Попапы) */
+/* Попапы */
 .info__bg {
 	position: fixed;
 	top: 0;
@@ -112,7 +127,7 @@ img {
 }
 
 .info__close {
-	display: none; /* На ПК кнопка не нужна */
+	display: none;
 }
 
 .info__photo {
@@ -122,7 +137,7 @@ img {
 	object-fit: cover;
 }
 
-/* Фильтры по умолчанию (ПК) */
+/* Фильтры */
 .filters {
 	position: fixed;
 	top: 20px;
@@ -162,23 +177,12 @@ img {
 	color: #fff;
 }
 
-
-/* ==========================================================================
-   МЕДИА-ЗАПРОСЫ (АДАПТИВ ДЛЯ ПЛАНШЕТОВ И МОБИЛЬНЫХ)
-   ========================================================================== */
-
-@media (max-width: 1024px) {
-	.map-farm {
-		width: 1800px; /* Оптимальный размер карты для планшетов */
-	}
-}
-
+/* Адаптив под мобильные */
 @media (max-width: 768px) {
-	/* Переносим фильтры вниз экрана — под большой палец */
 	.filters {
 		top: auto;
 		bottom: 20px;
-		width: 90%;
+		width: 95%;
 		justify-content: center;
 		padding: 8px 10px;
 	}
@@ -188,7 +192,6 @@ img {
 		padding: 6px 12px;
 	}
 
-	/* Перестраиваем попап во весь экран на мобилках */
 	.info {
 		width: 100%;
 		height: 100%;
@@ -200,7 +203,6 @@ img {
 		padding: 60px 20px 20px 20px;
 	}
 
-	/* Кнопка закрытия для мобильного попапа */
 	.info__close {
 		display: block;
 		position: absolute;
@@ -216,9 +218,5 @@ img {
 		cursor: pointer;
 		color: #333;
 		text-align: center;
-	}
-	
-	.map-farm {
-		width: 1400px; /* Размер карты для мобилок. Можно свободно двигать пальцем */
 	}
 }
