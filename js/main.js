@@ -4,12 +4,12 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Настройка Panzoom
+// Настройка Panzoom: разрешаем перемещение за границы экрана
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
     maxScale: 5,
     minScale: 0.4,
-    contain: 'outside',
+    contain: 'outside', 
     canvas: true
 });
 
