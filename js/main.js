@@ -4,16 +4,19 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom напрямую на элемент карты
+// Инициализация Panzoom
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
-    maxScale: 6,
-    minScale: 0.15,
-    contain: 'outside', // Позволяет свободно таскать во все стороны
-    startScale: 0.3 // Стартовый масштаб, чтобы карта сразу влезала в экран мобильного
+    maxScale: 5,
+    minScale: 0.2,
+    contain: 'outside', 
+    startScale: 0.35 // Сразу немного отдаляем карту, чтобы она красиво влезала в экран телефона
 });
 
-// Настройка зума колесиком мыши (слушаем родительский контейнер)
+// ВАЖНО ДЛЯ МОБИЛЬНЫХ: Принудительно запускаем отслеживание тач-жестов (щипков и свайпов)
+panzoom.bind();
+
+// Зум колесиком мыши на ПК
 panzoomElement.parentElement.addEventListener('wheel', (e) => {
     e.preventDefault();
     panzoom.zoomWithWheel(e);
