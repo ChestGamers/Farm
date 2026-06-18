@@ -8,46 +8,40 @@ body {
 	padding: 0;
 	font-family: 'Montserrat', sans-serif;
 	background-color: #1a1a1a;
-	overflow: hidden; /* Браузерный скролл больше не нужен, управление внутри Panzoom */
+	overflow: hidden; /* Блокируем стандартный скролл страницы */
 }
 
 img {
 	max-width: 100%;
 	height: auto;
-	user-select: none; /* Защита от случайного выделения картинки при перетаскивании */
+	user-select: none;
 	-webkit-user-drag: none;
 }
 
-/* Главный контейнер-окно */
+/* Окно просмотра */
 .Map {
 	width: 100vw;
 	height: 100vh;
 	position: relative;
-	overflow: hidden; /* Прячем стандартные полосы прокрутки */
+	overflow: hidden;
 	cursor: grab;
-	background-color: #1a1a1a;
-	
-	/* ВАЖНО: Запрещает браузеру перехватывать жесты скролла (решает проблему блокировки движения) */
-	touch-action: none; 
+	touch-action: none; /* Запрещает браузеру перехватывать жесты тача (Решает проблему передвижения) */
 }
 
 .Map:active {
 	cursor: grabbing;
 }
 
-/* Обертка для Panzoom */
+/* Обертка для библиотеки */
 .map-wrapper {
 	width: 100%;
 	height: 100%;
-	display: block; /* Убираем flex, чтобы он не сжимал карту по осям */
 }
 
-/* Контейнер самой карты */
+/* Сама карта. Жестко фиксируем размеры для правильного расчета движения влево/вправо */
 .map-farm {
-	/* Задаем фиксированную базовую ширину. 
-	   Panzoom будет масштабировать и двигать этот блок во все стороны без ограничений флексбокса */
 	width: 3302px; 
-	height: 1651px; /* Пропорционально viewBox вашего SVG (6640x3302) */
+	height: 1651px; 
 	position: relative;
 }
 
@@ -141,7 +135,7 @@ img {
 	object-fit: cover;
 }
 
-/* Фильтры */
+/* Кнопки фильтров */
 .filters {
 	position: fixed;
 	top: 20px;
@@ -181,7 +175,7 @@ img {
 	color: #fff;
 }
 
-/* Адаптив под мобильные */
+/* Адаптивность для смартфонов */
 @media (max-width: 768px) {
 	.filters {
 		top: auto;
