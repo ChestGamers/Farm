@@ -24,7 +24,6 @@ img {
 	position: relative;
 	overflow: hidden;
 	cursor: grab;
-	/* Отключаем стандартные жесты браузера, чтобы они не мешали Panzoom двигать карту */
 	touch-action: none; 
 }
 
@@ -35,13 +34,16 @@ img {
 .map-wrapper {
 	width: 100%;
 	height: 100%;
+	position: relative;
 }
 
-/* Задаем фиксированный размер карты, чтобы её можно было скроллить во все стороны */
+/* Жестко фиксируем размеры и позиционирование для Panzoom */
 .map-farm {
 	width: 3302px;
 	height: 1651px;
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .map-farm svg {
@@ -88,7 +90,7 @@ img {
 	font-size: 14px;
 }
 
-/* Кнопки фильтрации */
+/* Меню кнопок-фильтров */
 .filters {
 	position: fixed;
 	top: 20px;
