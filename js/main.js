@@ -4,19 +4,19 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom — базовая, без блокирующих функций
+// Инициализация Panzoom
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
     maxScale: 5,
     minScale: 0.3,
     contain: 'outside', 
-    canvas: true // Оставляем холст для правильной работы тачей
+    canvas: true 
 });
 
 // Настройка зума колесиком мыши на ПК
 panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
-// ФУНКЦИЯ АВТОМАТИЧЕСКОГО СЧЕТЧИКА КЛЮЧЕЙ
+// Функция автоматического счетчика ключей
 function updateCounters() {
     const totalKeys = keys.length;
     let lootCount = 0;
@@ -57,11 +57,11 @@ keys.forEach(key => {
 	}
 });
 
-// Фильтрация кнопок
+// Фильтрация кнопок (исправлено!)
 const filterButtons = document.querySelectorAll('.filter-btn');
 filterButtons.forEach(button => {
     button.addEventListener('click', function(e) {
-        e.stopPropagation(); // Предотвращаем передачу клика на карту
+        e.stopPropagation(); 
         
         filterButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
@@ -69,9 +69,9 @@ filterButtons.forEach(button => {
         const filterValue = this.dataset.filter;
         keys.forEach(key => {
             if (filterValue === 'all' || key.dataset.type === filterValue) {
-                key.style.style.display = 'block';
+                key.style.display = 'block';
             } else {
-                key.style.style.display = 'none';
+                key.style.display = 'none';
             }
         });
     });
