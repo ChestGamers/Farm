@@ -109,8 +109,6 @@ img {
 	box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255,255,255,0.08);
-	/* ВАЖНО: Сама плашка пропускает клики сквозь себя к карте */
-	pointer-events: none; 
 }
 
 .filter-btn {
@@ -130,8 +128,6 @@ img {
 	gap: 8px;
 	transition: all 0.2s ease;
 	white-space: nowrap;
-	/* ВАЖНО: Кнопки внутри плашки остаются кликабельными */
-	pointer-events: auto; 
 }
 
 .filter-btn:hover { 
@@ -235,29 +231,26 @@ img {
 	background: #1a1a1a;
 }
 
-/* МОБИЛЬНЫЙ АДАПТИВ */
+/* СТАБИЛЬНЫЙ МОБИЛЬНЫЙ АДАПТИВ БЕЗ БЛОКИРОВОК КАРТЫ */
 @media (max-width: 768px) {
 	.filters {
 		top: auto;
 		bottom: 16px;
 		left: 50%;
 		transform: translateX(-50%);
-		width: max-content;
-		max-width: 94%;
+		width: 90%; /* Стандартная безопасная ширина */
+		max-width: 340px; /* Ограничиваем плашку, чтобы кнопки плотно сидели */
 		display: flex;
 		justify-content: center;
 		padding: 4px;
 		gap: 4px;
 		border-radius: 3px;
-		overflow: hidden;
-		pointer-events: none; /* Пропускаем жесты на мобилке */
 	}
 
 	.filter-btn {
-		padding: 5px 10px;
-		font-size: 10px;
-		gap: 5px;
-		pointer-events: auto; /* Кнопки работают */
+		padding: 5px 8px; /* Ужали кнопки, сделав их ультра-компактными */
+		font-size: 10px; /* Маленький аккуратный шрифт */
+		gap: 4px;
 	}
 
 	.count-badge {
