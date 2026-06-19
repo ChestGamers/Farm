@@ -109,6 +109,8 @@ img {
 	box-shadow: 0 10px 30px rgba(0,0,0,0.7);
 	backdrop-filter: blur(10px);
 	border: 1px solid rgba(255,255,255,0.08);
+	/* ВАЖНО: Сама плашка пропускает клики сквозь себя к карте */
+	pointer-events: none; 
 }
 
 .filter-btn {
@@ -128,6 +130,8 @@ img {
 	gap: 8px;
 	transition: all 0.2s ease;
 	white-space: nowrap;
+	/* ВАЖНО: Кнопки внутри плашки остаются кликабельными */
+	pointer-events: auto; 
 }
 
 .filter-btn:hover { 
@@ -231,31 +235,33 @@ img {
 	background: #1a1a1a;
 }
 
-/* УЛЬТРА-КОМПАКТНЫЙ АДАПТИВ ДЛЯ МОБИЛЬНЫХ */
+/* МОБИЛЬНЫЙ АДАПТИВ */
 @media (max-width: 768px) {
 	.filters {
 		top: auto;
-		bottom: 16px; /* Чуть ближе к нижнему краю */
-		width: auto; /* Теперь панель подстраивается под контент, а не растягивается */
+		bottom: 16px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: max-content;
 		max-width: 94%;
+		display: flex;
 		justify-content: center;
-		padding: 4px; /* Минимальный внутренний отступ плашки */
-		gap: 4px; /* Минимальное расстояние между кнопками */
+		padding: 4px;
+		gap: 4px;
 		border-radius: 3px;
-	}
-	
-	.filters::-webkit-scrollbar {
-		display: none;
+		overflow: hidden;
+		pointer-events: none; /* Пропускаем жесты на мобилке */
 	}
 
 	.filter-btn {
-		padding: 5px 10px; /* Сжали кнопки по вертикали и горизонтали */
-		font-size: 10px; /* Сделали шрифт еще меньше и аккуратнее */
-		gap: 5px; /* Меньше расстояние между текстом и цифрой */
+		padding: 5px 10px;
+		font-size: 10px;
+		gap: 5px;
+		pointer-events: auto; /* Кнопки работают */
 	}
 
 	.count-badge {
-		font-size: 9px; /* Сжали саму цифру счетчика */
+		font-size: 9px;
 		padding: 1px 4px;
 	}
 
