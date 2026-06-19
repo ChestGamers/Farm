@@ -46,7 +46,7 @@ keys.forEach(key => {
     // ОТКРЫТИЕ БОЛЬШОГО ОКНА (Чисто для ПК)
     key.addEventListener('click', function(e) {
         e.stopPropagation();
-        if (isTouchDevice) return; // На мобилках клик полностью игнорируем
+        if (isTouchDevice) return; 
         openFullPopup(this);
     });
 
@@ -62,7 +62,7 @@ keys.forEach(key => {
         key.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
     }
 
-    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК (Исправленная!)
+    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК
     if (isTouchDevice) {
         key.addEventListener('touchstart', function(e) {
             e.stopPropagation();
@@ -72,7 +72,6 @@ keys.forEach(key => {
         }, { passive: true });
 
         key.addEventListener('touchend', function(e) {
-            // ВАЖНО: Предотвращаем симуляцию клика браузером после тапа!
             e.preventDefault(); 
             e.stopPropagation();
             
@@ -80,17 +79,12 @@ keys.forEach(key => {
             const moveX = Math.abs(touch.clientX - touchStartX);
             const moveY = Math.abs(touch.clientY - touchStartY);
 
-            // Если это был чистый тап (не сдвиг карты)
             if (moveX < scrollThreshold && moveY < scrollThreshold) {
-                
-                // Если мы тапаем по ключу, который УЖЕ активен (тултип горит) — открываем большое окно
                 if (activeMobileKey === this) {
                     openFullPopup(this);
                 } else {
-                    // Иначе это первый тап по новому ключу.
-                    tooltip.style.display = 'none'; // Скрываем предыдущий тултип, если он был
-                    
-                    activeMobileKey = this; // Запоминаем текущую точку
+                    tooltip.style.display = 'none'; 
+                    activeMobileKey = this; 
                     tooltip.innerText = this.dataset.title;
                     tooltip.style.display = 'block';
                     
@@ -98,7 +92,7 @@ keys.forEach(key => {
                     tooltip.style.left = (touch.clientX - 40) + 'px';
                 }
             }
-        }, { passive: false }); // Важно: false, чтобы разрешить preventDefault
+        }, { passive: false }); 
     }
 });
 
@@ -111,6 +105,9 @@ function openFullPopup(keyElement) {
     popup.querySelector('.info_title').innerText = keyElement.dataset.title;
     popup.querySelector('.info__text').innerText = keyElement.dataset.description;
     popupBg.classList.add('active');
+    
+    // Сбрасываем скролл попапа в самый верх при открытии нового ключа
+    popup.scrollTop = 0;
 }
 
 // Функция закрытия окна
@@ -157,3 +154,13 @@ filterButtons.forEach(button => {
 
 popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
 if (popupClose) popupClose.addEventListener('click', closePopup);
+
+// ИСПРАВЛЕННЫЙ БЛОКИРОВЩИК PULL-TO-REFRESH
+document.body.addEventListener('touchmove', function(e) {
+    // Если палец двигается внутри попапа информации — РАЗРЕШАЕМ СКРОЛЛ
+    if (e.target.closest('.info')) {
+        return; 
+    }
+    // Во всех остальных местах страницы — блокируем стандартный скролл браузера
+    e.preventDefault();
+}, { passive: false });
