@@ -28,7 +28,8 @@ img {
 	position: relative;
 	overflow: hidden;
 	cursor: grab;
-	touch-action: auto; 
+	/* Разрешаем вертикальный скролл страницы браузера */
+	touch-action: pan-y; 
 }
 
 .Map:active {
