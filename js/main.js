@@ -38,15 +38,15 @@ updateCounters();
 let touchStartX = 0;
 let touchStartY = 0;
 const scrollThreshold = 10; 
-let activeMobileKey = null; // Запоминаем текущую активную точку
+let activeMobileKey = null; 
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 keys.forEach(key => {
-    // ОТКРЫТИЕ БОЛЬШОГО ОКНА (Для ПК)
+    // ОТКРЫТИЕ БОЛЬШОГО ОКНА (Чисто для ПК)
     key.addEventListener('click', function(e) {
         e.stopPropagation();
-        if (isTouchDevice) return; 
+        if (isTouchDevice) return; // На мобилках клик полностью игнорируем
         openFullPopup(this);
     });
 
@@ -62,7 +62,7 @@ keys.forEach(key => {
         key.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
     }
 
-    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК (Разделение на 1-й и 2-й тап)
+    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК (Исправленная!)
     if (isTouchDevice) {
         key.addEventListener('touchstart', function(e) {
             e.stopPropagation();
@@ -72,9 +72,11 @@ keys.forEach(key => {
         }, { passive: true });
 
         key.addEventListener('touchend', function(e) {
+            // ВАЖНО: Предотвращаем симуляцию клика браузером после тапа!
+            e.preventDefault(); 
             e.stopPropagation();
-            const touch = e.changedTouches[0];
             
+            const touch = e.changedTouches[0];
             const moveX = Math.abs(touch.clientX - touchStartX);
             const moveY = Math.abs(touch.clientY - touchStartY);
 
@@ -83,15 +85,12 @@ keys.forEach(key => {
                 
                 // Если мы тапаем по ключу, который УЖЕ активен (тултип горит) — открываем большое окно
                 if (activeMobileKey === this) {
-                    tooltip.style.display = 'none';
-                    activeMobileKey = null; // СРАЗУ сбрасываем, чтобы не залипало
                     openFullPopup(this);
                 } else {
-                    // Иначе это первый тап по НОВОМУ ключу. 
-                    // Гарантированно прячем старый тултип, если он где-то горел
-                    tooltip.style.display = 'none'; 
+                    // Иначе это первый тап по новому ключу.
+                    tooltip.style.display = 'none'; // Скрываем предыдущий тултип, если он был
                     
-                    activeMobileKey = this; // Делаем этот ключ активным
+                    activeMobileKey = this; // Запоминаем текущую точку
                     tooltip.innerText = this.dataset.title;
                     tooltip.style.display = 'block';
                     
@@ -99,13 +98,13 @@ keys.forEach(key => {
                     tooltip.style.left = (touch.clientX - 40) + 'px';
                 }
             }
-        }, { passive: true });
+        }, { passive: false }); // Важно: false, чтобы разрешить preventDefault
     }
 });
 
 // Функция открытия большого попапа
 function openFullPopup(keyElement) {
-    activeMobileKey = null; // Полная очистка при вызове окна
+    activeMobileKey = null; 
     tooltip.style.display = 'none';
     
     popup.querySelector('.info__photo').setAttribute('src', keyElement.dataset.photo);
@@ -117,13 +116,12 @@ function openFullPopup(keyElement) {
 // Функция закрытия окна
 const closePopup = () => {
     popupBg.classList.remove('active');
-    activeMobileKey = null; // Полная очистка статуса при закрытии
+    activeMobileKey = null; 
     tooltip.style.display = 'none';
 };
 
 // Сброс подсказок при клике на пустую карту или сдвиге
 document.addEventListener('touchstart', (e) => {
-    // Если кликаем мимо кнопок фильтров и мимо попапа — сбрасываем статус
     if (!e.target.closest('.filter-btn') && !e.target.closest('.info')) {
         tooltip.style.display = 'none';
         activeMobileKey = null;
