@@ -4,22 +4,16 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom на обертку холста
+// Инициализация Panzoom — базовая, без блокирующих функций
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
     maxScale: 5,
     minScale: 0.3,
     contain: 'outside', 
-    canvas: true, 
-    handleStartEvent: (e) => {
-        if (e.target.closest('.key') || e.target.closest('.filters')) {
-            return;
-        }
-        e.preventDefault();
-    }
+    canvas: true // Оставляем холст для правильной работы тачей
 });
 
-// Настройка зума колесиком мыши
+// Настройка зума колесиком мыши на ПК
 panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
 
 // ФУНКЦИЯ АВТОМАТИЧЕСКОГО СЧЕТЧИКА КЛЮЧЕЙ
@@ -33,7 +27,6 @@ function updateCounters() {
         if (key.dataset.type === 'quest') questCount++;
     });
 
-    // Записываем цифры в соответствующие кнопки
     document.getElementById('count-all').innerText = totalKeys;
     document.getElementById('count-loot').innerText = lootCount;
     document.getElementById('count-quest').innerText = questCount;
@@ -67,16 +60,18 @@ keys.forEach(key => {
 // Фильтрация кнопок
 const filterButtons = document.querySelectorAll('.filter-btn');
 filterButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(e) {
+        e.stopPropagation(); // Предотвращаем передачу клика на карту
+        
         filterButtons.forEach(btn => btn.classList.remove('active'));
         this.classList.add('active');
 
         const filterValue = this.dataset.filter;
         keys.forEach(key => {
             if (filterValue === 'all' || key.dataset.type === filterValue) {
-                key.style.display = 'block';
+                key.style.style.display = 'block';
             } else {
-                key.style.display = 'none';
+                key.style.style.display = 'none';
             }
         });
     });
