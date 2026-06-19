@@ -62,7 +62,7 @@ keys.forEach(key => {
         key.addEventListener('mouseleave', function() { tooltip.style.display = 'none'; });
     }
 
-    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК
+    // УМНАЯ ЛОГИКА ДЛЯ МОБИЛОК (1-й тап — имя, 2-й тап — попап)
     if (isTouchDevice) {
         key.addEventListener('touchstart', function(e) {
             e.stopPropagation();
@@ -155,12 +155,22 @@ filterButtons.forEach(button => {
 popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
 if (popupClose) popupClose.addEventListener('click', closePopup);
 
-// ИСПРАВЛЕННЫЙ БЛОКИРОВЩИК PULL-TO-REFRESH
-document.body.addEventListener('touchmove', function(e) {
-    // Если палец двигается внутри попапа информации — РАЗРЕШАЕМ СКРОЛЛ
+// УМНЫЙ БЛОКИРОВЩИК: скроллит страницу ТОЛЬКО при максимальном отдалении карты
+document.addEventListener('touchmove', function(e) {
+    // 1. Если открыто окно описания (.info), разрешаем внутри него скроллить текст
     if (e.target.closest('.info')) {
         return; 
     }
-    // Во всех остальных местах страницы — блокируем стандартный скролл браузера
-    e.preventDefault();
+    
+    // 2. Узнаем текущий масштаб карты из библиотеки Panzoom
+    const currentScale = panzoom.getScale();
+    
+    // 3. Проверяем масштаб:
+    if (currentScale > 0.1) {
+        // Если карта приближена — намертво блокируем скролл страницы, двигается только карта
+        e.preventDefault();
+    } else {
+        // Если карта полностью отдалена (scale равен 0.1), мы НЕ вызываем preventDefault.
+        // Браузер подхватит жест и начнет двигать всю страницу вниз или вверх к инструкции!
+    }
 }, { passive: false });
