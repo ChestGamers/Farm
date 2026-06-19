@@ -103,8 +103,20 @@ keys.forEach(key => {
                     tooltip.innerText = this.dataset.title;
                     tooltip.style.display = 'block';
                     
-                    tooltip.style.top = (touch.clientY - 55) + 'px';
-                    tooltip.style.left = (touch.clientX - 40) + 'px';
+                    // Получаем геометрию текущей кнопки-маркера
+                    const rect = this.getBoundingClientRect();
+                    
+                    // Высчитываем центр по горизонтали
+                    tooltip.style.left = (rect.left + rect.width / 2 - tooltip.offsetWidth / 2) + 'px';
+                    
+                    // УМНОЕ ПОЗИЦИОНИРОВАНИЕ ВЕРТИКАЛИ:
+                    // Если до верхнего края экрана осталось меньше 60px — кидаем тултип ПОД кнопку
+                    if (rect.top < 60) {
+                        tooltip.style.top = (rect.bottom + 10) + 'px'; // 10px отступ снизу
+                    } else {
+                        // Иначе стандартно вешаем НАД кнопкой
+                        tooltip.style.top = (rect.top - 45) + 'px'; 
+                    }
                 }
             }
         }, { passive: false }); 
