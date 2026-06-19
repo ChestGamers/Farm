@@ -4,13 +4,13 @@ const popupBg = document.querySelector('.info__bg');
 const popup = document.querySelector('.info');
 const popupClose = document.querySelector('.info__close');
 
-// Инициализация Panzoom
+// Инициализация Panzoom — возвращаем стабильный базовый режим
 const panzoomElement = document.getElementById('panzoom-element');
 const panzoom = Panzoom(panzoomElement, {
-    maxScale: 5,
-    minScale: 0.3,
-    contain: 'outside', 
-    canvas: true 
+    maxScale: 6,
+    minScale: 0.1,
+    contain: 'outside',
+    startScale: 1 // Карта откроется в нормальном масштабе 1:1 по центру
 });
 
 // Настройка зума колесиком мыши на ПК
@@ -57,7 +57,7 @@ keys.forEach(key => {
 	}
 });
 
-// Фильтрация кнопок (исправлено!)
+// Фильтрация кнопок
 const filterButtons = document.querySelectorAll('.filter-btn');
 filterButtons.forEach(button => {
     button.addEventListener('click', function(e) {
