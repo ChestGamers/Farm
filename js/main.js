@@ -38,18 +38,15 @@ updateCounters();
 let touchStartX = 0;
 let touchStartY = 0;
 const scrollThreshold = 10; 
-let activeMobileKey = null; // Запоминаем, на какой ключ нажали первый раз
+let activeMobileKey = null; // Запоминаем текущую активную точку
 
 const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 keys.forEach(key => {
-    // ОТКРЫТИЕ БОЛЬШОГО ОКНА (Для ПК — по клику, для мобилок — контролируется ниже)
+    // ОТКРЫТИЕ БОЛЬШОГО ОКНА (Для ПК)
     key.addEventListener('click', function(e) {
         e.stopPropagation();
-        
-        // Если это мобилка, стандартный клик не должен сразу открывать большое окно
         if (isTouchDevice) return; 
-
         openFullPopup(this);
     });
 
@@ -84,14 +81,17 @@ keys.forEach(key => {
             // Если это был чистый тап (не сдвиг карты)
             if (moveX < scrollThreshold && moveY < scrollThreshold) {
                 
-                // Если мы тапаем по ключу, на котором УЖЕ горит тултип — открываем большое окно
+                // Если мы тапаем по ключу, который УЖЕ активен (тултип горит) — открываем большое окно
                 if (activeMobileKey === this) {
                     tooltip.style.display = 'none';
-                    activeMobileKey = null; // сбрасываем статус
+                    activeMobileKey = null; // СРАЗУ сбрасываем, чтобы не залипало
                     openFullPopup(this);
                 } else {
-                    // Иначе — это первый тап. Показываем только тултип
-                    activeMobileKey = this;
+                    // Иначе это первый тап по НОВОМУ ключу. 
+                    // Гарантированно прячем старый тултип, если он где-то горел
+                    tooltip.style.display = 'none'; 
+                    
+                    activeMobileKey = this; // Делаем этот ключ активным
                     tooltip.innerText = this.dataset.title;
                     tooltip.style.display = 'block';
                     
@@ -105,16 +105,29 @@ keys.forEach(key => {
 
 // Функция открытия большого попапа
 function openFullPopup(keyElement) {
+    activeMobileKey = null; // Полная очистка при вызове окна
+    tooltip.style.display = 'none';
+    
     popup.querySelector('.info__photo').setAttribute('src', keyElement.dataset.photo);
     popup.querySelector('.info_title').innerText = keyElement.dataset.title;
     popup.querySelector('.info__text').innerText = keyElement.dataset.description;
     popupBg.classList.add('active');
 }
 
-// Сброс подсказок при клике на карту или сдвиге
-document.addEventListener('touchstart', () => {
+// Функция закрытия окна
+const closePopup = () => {
+    popupBg.classList.remove('active');
+    activeMobileKey = null; // Полная очистка статуса при закрытии
     tooltip.style.display = 'none';
-    activeMobileKey = null;
+};
+
+// Сброс подсказок при клике на пустую карту или сдвиге
+document.addEventListener('touchstart', (e) => {
+    // Если кликаем мимо кнопок фильтров и мимо попапа — сбрасываем статус
+    if (!e.target.closest('.filter-btn') && !e.target.closest('.info')) {
+        tooltip.style.display = 'none';
+        activeMobileKey = null;
+    }
 }, { passive: true });
 
 panzoomElement.addEventListener('panzoompan', () => {
@@ -144,6 +157,5 @@ filterButtons.forEach(button => {
     });
 });
 
-const closePopup = () => popupBg.classList.remove('active');
 popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
 if (popupClose) popupClose.addEventListener('click', closePopup);
