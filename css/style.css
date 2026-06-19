@@ -3,12 +3,19 @@
 	-webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
 	margin: 0;
 	padding: 0;
+	width: 100%;
+	height: 100vh;
 	font-family: 'Montserrat', sans-serif;
 	background-color: #0b0b0b;
 	overflow: hidden;
+	
+	/* ИСПРАВЛЕНО: Блокирует стрелку обновления (pull-to-refresh) при свайпе вниз, */
+	/* но оставляет странице естественную подвижность на границах */
+	overscroll-behavior-y: contain; 
+	-webkit-overflow-scrolling: touch;
 }
 
 img {
@@ -24,7 +31,8 @@ img {
 	position: relative;
 	overflow: hidden;
 	cursor: grab;
-	touch-action: none; 
+	/* Разрешаем браузеру подхватывать жесты, когда Panzoom упирается в лимит отдаления */
+	touch-action: auto; 
 }
 
 .Map:active {
@@ -40,7 +48,6 @@ img {
 	justify-content: center;
 }
 
-/* ИСПРАВЛЕНО: Убираем гигантские пиксели, делаем контейнер гибким */
 .map-farm {
 	width: 100%;
 	max-width: 3302px;
