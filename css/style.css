@@ -35,14 +35,24 @@ img {
 	width: 100%;
 	height: 100%;
 	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
+/* ИСПРАВЛЕНО: Убираем гигантские пиксели, делаем контейнер гибким */
 .map-farm {
-	width: 3302px;
-	height: 1651px;
-	position: absolute;
-	top: 0;
-	left: 0;
+	width: 100%;
+	max-width: 3302px;
+	height: auto;
+	position: relative;
+	display: inline-block;
+}
+
+.map-farm img {
+	display: block;
+	width: 100%;
+	height: auto;
 }
 
 .map-farm svg {
@@ -231,15 +241,15 @@ img {
 	background: #1a1a1a;
 }
 
-/* СТАБИЛЬНЫЙ МОБИЛЬНЫЙ АДАПТИВ БЕЗ БЛОКИРОВОК КАРТЫ */
+/* МОБИЛЬНЫЙ АДАПТИВ */
 @media (max-width: 768px) {
 	.filters {
 		top: auto;
 		bottom: 16px;
 		left: 50%;
 		transform: translateX(-50%);
-		width: 90%; /* Стандартная безопасная ширина */
-		max-width: 340px; /* Ограничиваем плашку, чтобы кнопки плотно сидели */
+		width: 90%; 
+		max-width: 340px; 
 		display: flex;
 		justify-content: center;
 		padding: 4px;
@@ -248,8 +258,8 @@ img {
 	}
 
 	.filter-btn {
-		padding: 5px 8px; /* Ужали кнопки, сделав их ультра-компактными */
-		font-size: 10px; /* Маленький аккуратный шрифт */
+		padding: 5px 8px; 
+		font-size: 10px; 
 		gap: 4px;
 	}
 
