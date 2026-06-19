@@ -13,8 +13,23 @@ const panzoom = Panzoom(panzoomElement, {
     startScale: 1
 });
 
-// Настройка зума колесиком мыши на ПК
-panzoomElement.parentElement.addEventListener('wheel', panzoom.zoomWithWheel);
+// УМНАЯ НАСТРОЙКА ЗУМА КОЛЕСИКОМ НА ПК
+panzoomElement.parentElement.addEventListener('wheel', function(e) {
+    const currentScale = panzoom.getScale();
+
+    // Если масштаб минимальный (0.1) И пользователь крутит колесико НА СЕБЯ (вниз, e.deltaY > 0)
+    if (currentScale <= 0.1 && e.deltaY > 0) {
+        // Мы НЕ вызываем panzoom.zoomWithWheel и НЕ делаем e.preventDefault().
+        // Позволяем браузеру прокрутить саму страницу вниз к инструкции.
+    } else if (window.scrollY > 0 && e.deltaY < 0) {
+        // Если страница прокручена вниз, и пользователь крутит колесико ОТ СЕБЯ (вверх),
+        // даем странице сначала вернуться в самый верх, прежде чем зумить карту.
+    } else {
+        // Во всех остальных случаях — зумим карту и запрещаем скролл страницы
+        e.preventDefault();
+        panzoom.zoomWithWheel(e);
+    }
+}, { passive: false });
 
 // Функция автоматического счетчика ключей
 function updateCounters() {
@@ -155,22 +170,15 @@ filterButtons.forEach(button => {
 popupBg.addEventListener('click', (e) => { if(e.target === popupBg) closePopup(); });
 if (popupClose) popupClose.addEventListener('click', closePopup);
 
-// УМНЫЙ БЛОКИРОВЩИК: скроллит страницу ТОЛЬКО при максимальном отдалении карты
+// УМНЫЙ БЛОКИРОВЩИК ДЛЯ МОБИЛОК: скроллит страницу ТОЛЬКО при максимальном отдалении карты
 document.addEventListener('touchmove', function(e) {
-    // 1. Если открыто окно описания (.info), разрешаем внутри него скроллить текст
     if (e.target.closest('.info')) {
         return; 
     }
     
-    // 2. Узнаем текущий масштаб карты из библиотеки Panzoom
     const currentScale = panzoom.getScale();
     
-    // 3. Проверяем масштаб:
     if (currentScale > 0.1) {
-        // Если карта приближена — намертво блокируем скролл страницы, двигается только карта
         e.preventDefault();
-    } else {
-        // Если карта полностью отдалена (scale равен 0.1), мы НЕ вызываем preventDefault.
-        // Браузер подхватит жест и начнет двигать всю страницу вниз или вверх к инструкции!
     }
 }, { passive: false });
